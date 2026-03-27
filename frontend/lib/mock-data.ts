@@ -81,7 +81,23 @@ export const customers = [
     churn: 79,
     late: 84,
     revenue: "$182k",
-    summary: "Usage down 32%, 4 critical tickets, invoice overdue by 12 days."
+    summary: "Usage down 32%, 4 critical tickets, invoice overdue by 12 days.",
+    countryFlag: "US",
+    status: "Payment Overdue",
+    contractRenewal: "45 days",
+    activeUsers: 350,
+    usageDelta: "-32%",
+    aiNarrative: "Customer shows elevated churn and payment risk due to sharp platform usage decline, repeated critical support incidents, recent payment delay, and an active renewal pressure window.",
+    paymentHistory: [
+      { month: "Jan", status: "Paid", amount: "$182k" },
+      { month: "Feb", status: "Paid", amount: "$182k" },
+      { month: "Mar", status: "Overdue", amount: "$182k" }
+    ],
+    recentSignals: [
+      { label: "Critical tickets", value: "4", tone: "red" },
+      { label: "Usage delta", value: "-32%", tone: "orange" },
+      { label: "Renewal window", value: "45 days", tone: "amber" }
+    ]
   },
   {
     id: "f0b50a84-cad7-4dcc-9f42-16fd5de2f102",
@@ -94,7 +110,23 @@ export const customers = [
     churn: 22,
     late: 19,
     revenue: "$76k",
-    summary: "Healthy usage, stable billing profile and low support pressure."
+    summary: "Healthy usage, stable billing profile and low support pressure.",
+    countryFlag: "BR",
+    status: "Healthy",
+    contractRenewal: "120 days",
+    activeUsers: 188,
+    usageDelta: "+6%",
+    aiNarrative: "Customer remains in a low-risk band with stable collections, resilient product usage, and no active support escalations.",
+    paymentHistory: [
+      { month: "Jan", status: "Paid", amount: "$76k" },
+      { month: "Feb", status: "Paid", amount: "$76k" },
+      { month: "Mar", status: "Paid", amount: "$76k" }
+    ],
+    recentSignals: [
+      { label: "Critical tickets", value: "0", tone: "green" },
+      { label: "Usage delta", value: "+6%", tone: "green" },
+      { label: "Renewal window", value: "120 days", tone: "green" }
+    ]
   },
   {
     id: "f0b50a84-cad7-4dcc-9f42-16fd5de2f103",
@@ -107,7 +139,23 @@ export const customers = [
     churn: 41,
     late: 38,
     revenue: "$129k",
-    summary: "Moderate renewal exposure with mild adoption softness."
+    summary: "Moderate renewal exposure with mild adoption softness.",
+    countryFlag: "DE",
+    status: "Renewal Watch",
+    contractRenewal: "63 days",
+    activeUsers: 265,
+    usageDelta: "-4%",
+    aiNarrative: "Moderate revenue exposure is driven by upcoming renewal timing and softer product adoption, but billing risk remains contained.",
+    paymentHistory: [
+      { month: "Jan", status: "Paid", amount: "$129k" },
+      { month: "Feb", status: "Paid", amount: "$129k" },
+      { month: "Mar", status: "Paid", amount: "$129k" }
+    ],
+    recentSignals: [
+      { label: "Critical tickets", value: "1", tone: "amber" },
+      { label: "Usage delta", value: "-4%", tone: "amber" },
+      { label: "Renewal window", value: "63 days", tone: "orange" }
+    ]
   }
 ];
 
@@ -115,4 +163,24 @@ export const alerts = [
   { id: "1", severity: "Critical", title: "12-day overdue invoice", customer: "Alpha Capital Partners", type: "Late Payment", status: "Open" },
   { id: "2", severity: "High", title: "Adoption dropped below threshold", customer: "Alpha Capital Partners", type: "Churn", status: "Open" },
   { id: "3", severity: "Warning", title: "Renewal window opened", customer: "Orbit Manufacturing Hub", type: "Renewal", status: "Open" }
+];
+
+export const alertStats = [
+  { label: "Open alerts", value: "128", tone: "red" },
+  { label: "Critical cases", value: "34", tone: "orange" },
+  { label: "Resolved today", value: "19", tone: "green" }
+];
+
+export const simulatorPresets = [
+  { label: "Payment Delay", value: "15 days" },
+  { label: "Usage Decline", value: "-45%" },
+  { label: "Critical Tickets", value: "4" },
+  { label: "Renewal Window", value: "30 days" }
+];
+
+export const uploadCards = [
+  { label: "Customers", value: "3,842 rows", tone: "green" },
+  { label: "Payments", value: "14,280 rows", tone: "blue" },
+  { label: "Usage", value: "11,906 rows", tone: "orange" },
+  { label: "Tickets", value: "5,114 rows", tone: "red" }
 ];
