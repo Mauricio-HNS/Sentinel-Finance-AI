@@ -1,4 +1,5 @@
 // ---Made By Destiny7 Softwares---
+import { UploadWorkbench } from "@/components/upload-workbench";
 import { uploadCards } from "@/lib/mock-data";
 
 export default function UploadPage() {
@@ -23,13 +24,7 @@ export default function UploadPage() {
       </div>
 
       <div className="grid gap-4 xl:grid-cols-[1fr_0.85fr]">
-        <div className="panel p-8">
-          <div className="rounded-[2rem] border border-dashed border-white/20 bg-[#112036] p-16 text-center">
-            <p className="text-2xl font-semibold text-slate-100">Drop dataset here or click to browse</p>
-            <p className="mt-3 text-base text-slate-400">Supports customer, payment, usage and support exports in CSV format.</p>
-            <button className="mt-8 rounded-xl bg-sky-500 px-6 py-3 text-base font-semibold text-white">Select files</button>
-          </div>
-        </div>
+        <UploadWorkbench />
 
         <div className="space-y-4">
           <div className="panel p-6">

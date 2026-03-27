@@ -90,6 +90,12 @@ type ApiCopilot = {
   }>;
 };
 
+export type CsvUploadResult = {
+  fileName: string;
+  importedRows: number;
+  status: string;
+};
+
 async function safeFetch<T>(path: string): Promise<T | null> {
   try {
     const response = await fetch(`${apiBaseUrl}${path}`, {
@@ -298,4 +304,20 @@ export async function getCustomerCopilotViewModel(id: string) {
     analysis: apiCopilot.analysis,
     knowledge: apiCopilot.knowledge
   };
+}
+
+export async function uploadCustomerDataset(file: File): Promise<CsvUploadResult> {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const response = await fetch(`${apiBaseUrl}/api/ingestion/upload`, {
+    method: "POST",
+    body: formData
+  });
+
+  if (!response.ok) {
+    throw new Error("Upload failed");
+  }
+
+  return (await response.json()) as CsvUploadResult;
 }
