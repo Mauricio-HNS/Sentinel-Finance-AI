@@ -50,6 +50,7 @@ Sentinel turns fragmented finance and customer-health signals into a single deci
 - Customer portfolio list and customer detail view
 - Composite risk scoring and category-level risk scores
 - AI copilot on the customer detail experience
+- AI Ops control center for model posture, retrieval posture, and eval triggering
 - OpenAI-ready structured explanation pipeline
 - retrieval-backed knowledge surfacing for contracts and support tickets
 - eval trail for AI quality review
@@ -80,6 +81,7 @@ Sentinel is intentionally framed as a modern financial intelligence system, not 
 - `Knowledge Retrieval`: local contract, ticket, and playbook artifacts are retrieved as evidence today, with an OpenAI `file_search` path ready for vector-store-backed retrieval
 - `Prediction Service`: FastAPI isolates scoring and risk heuristics so the .NET API can evolve into an orchestration layer
 - `Eval Trail`: evaluation scenarios document whether the copilot behavior stays aligned as prompts and models evolve, with an eval-run path ready for smoke tests
+- `AI Ops Surface`: the frontend now exposes an operations console for stack status, eval scenarios, and smoke-run triggering
 - `Observability`: OpenTelemetry keeps the path open for tracing cross-service inference flows
 
 ## AI and platform stack
@@ -167,7 +169,6 @@ Additional UI flows for customers, alerts, simulator, and upload are scaffolded 
 
 ### V2
 
-- frontend AI ops panel consuming `/api/ai/status`
 - richer vector store/file-search grounding with uploaded enterprise documents
 - real OpenAI eval runs and prompt versioning
 - Redis-backed caching

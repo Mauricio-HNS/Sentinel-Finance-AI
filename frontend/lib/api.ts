@@ -96,6 +96,56 @@ export type CsvUploadResult = {
   status: string;
 };
 
+type ApiAiStatus = {
+  copilotMode: string;
+  explanationMode: string;
+  retrievalMode: string;
+  evalMode: string;
+  openAiConfigured: boolean;
+  vectorStoreConfigured: boolean;
+  evalSuiteConfigured: boolean;
+};
+
+type ApiEvalRecord = {
+  evaluationName: string;
+  scenario: string;
+  expectedBehavior: string;
+  scorecard: string;
+  status: string;
+  modelTarget: string;
+  updatedAt: string;
+};
+
+export type AiOpsStatus = {
+  copilotMode: string;
+  explanationMode: string;
+  retrievalMode: string;
+  evalMode: string;
+  openAiConfigured: boolean;
+  vectorStoreConfigured: boolean;
+  evalSuiteConfigured: boolean;
+};
+
+export type AiEvalViewModel = {
+  evaluationName: string;
+  scenario: string;
+  expectedBehavior: string;
+  scorecard: string;
+  status: string;
+  modelTarget: string;
+  updatedAt: string;
+};
+
+export type EvalRunResult = {
+  mode: string;
+  status: string;
+  target: string;
+  summary: string;
+  requestedAt: string;
+  runId?: string | null;
+  reportUrl?: string | null;
+};
+
 async function safeFetch<T>(path: string): Promise<T | null> {
   try {
     const response = await fetch(`${apiBaseUrl}${path}`, {
@@ -320,4 +370,72 @@ export async function uploadCustomerDataset(file: File): Promise<CsvUploadResult
   }
 
   return (await response.json()) as CsvUploadResult;
+}
+
+export async function getAiOpsViewModel() {
+  const [status, evals] = await Promise.all([
+    safeFetch<ApiAiStatus>("/api/ai/status"),
+    safeFetch<ApiEvalRecord[]>("/api/ai/evals/recent")
+  ]);
+
+  const fallbackStatus: AiOpsStatus = {
+    copilotMode: "openai-responses-structured",
+    explanationMode: "openai-responses-structured",
+    retrievalMode: "openai-file-search-ready",
+    evalMode: "openai-evals-ready",
+    openAiConfigured: false,
+    vectorStoreConfigured: false,
+    evalSuiteConfigured: false
+  };
+
+  const fallbackEvals: AiEvalViewModel[] = [
+    {
+      evaluationName: "Risk Copilot Groundedness",
+      scenario: "Usage drop + payment delay + critical tickets",
+      expectedBehavior: "Explain compounding risk clearly and cite operational signals.",
+      scorecard: "Groundedness / actionability / calibration",
+      status: "Ready",
+      modelTarget: "gpt-4.1-mini",
+      updatedAt: new Date().toISOString()
+    },
+    {
+      evaluationName: "Renewal Containment",
+      scenario: "Low adoption near renewal window",
+      expectedBehavior: "Recommend renewal recovery motion without hallucinating missing evidence.",
+      scorecard: "Accuracy / restraint / actionability",
+      status: "Ready",
+      modelTarget: "risk-copilot-smoke",
+      updatedAt: new Date().toISOString()
+    }
+  ];
+
+  return {
+    status: status ?? fallbackStatus,
+    evals:
+      evals?.map((item) => ({
+        evaluationName: item.evaluationName,
+        scenario: item.scenario,
+        expectedBehavior: item.expectedBehavior,
+        scorecard: item.scorecard,
+        status: item.status,
+        modelTarget: item.modelTarget,
+        updatedAt: new Date(item.updatedAt).toLocaleDateString("en-US", {
+          month: "short",
+          day: "numeric",
+          year: "numeric"
+        })
+      })) ?? fallbackEvals
+  };
+}
+
+export async function runRiskCopilotEval(): Promise<EvalRunResult> {
+  const response = await fetch(`${apiBaseUrl}/api/ai/evals/run-risk-copilot`, {
+    method: "POST"
+  });
+
+  if (!response.ok) {
+    throw new Error("Eval run failed");
+  }
+
+  return (await response.json()) as EvalRunResult;
 }
