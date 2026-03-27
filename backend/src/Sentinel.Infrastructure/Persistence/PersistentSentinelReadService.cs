@@ -252,7 +252,7 @@ public sealed class PersistentSentinelReadService(
                 contractEndDate = contractStartDate.AddYears(1);
             }
 
-            dbContext.Customers.Add(new Customer
+            var customer = new Customer
             {
                 Id = customerId,
                 Name = columns[1],
@@ -264,18 +264,18 @@ public sealed class PersistentSentinelReadService(
                 ContractStartDate = contractStartDate,
                 ContractEndDate = contractEndDate,
                 Status = columns[9]
-            });
+            };
 
-            dbContext.RiskAssessments.Add(new RiskAssessment
-            {
-                CustomerId = customerId,
-                OverallRiskScore = 25,
-                ChurnRiskScore = 21,
-                LatePaymentRiskScore = 19,
-                RevenueRiskScore = 24,
-                RiskLevel = RiskLevel.Low,
-                Summary = "Imported customer awaiting full signal enrichment."
-            });
+            dbContext.Customers.Add(customer);
+
+            var generatedBundle = GenerateImportedSignals(customer);
+            dbContext.Contracts.Add(generatedBundle.Contract);
+            dbContext.Payments.AddRange(generatedBundle.Payments);
+            dbContext.UsageMetrics.AddRange(generatedBundle.UsageMetrics);
+            dbContext.SupportTickets.AddRange(generatedBundle.Tickets);
+            dbContext.RiskAssessments.Add(generatedBundle.RiskAssessment);
+            dbContext.Alerts.AddRange(generatedBundle.Alerts);
+            dbContext.Predictions.AddRange(generatedBundle.Predictions);
             imported++;
         }
 
@@ -297,4 +297,188 @@ public sealed class PersistentSentinelReadService(
         dbContext.SaveChanges();
         return true;
     }
+
+    private static ImportedCustomerBundle GenerateImportedSignals(Customer customer)
+    {
+        var seed = Math.Abs(customer.Id.GetHashCode());
+        var usageDrop = -1 * (8 + seed % 28);
+        var daysLate = seed % 4 == 0 ? 0 : 4 + seed % 14;
+        var criticalTickets = customer.Segment == "Enterprise" ? 1 + seed % 4 : seed % 2;
+        var churnRisk = Math.Clamp(18 + Math.Abs(usageDrop) * 1.2 + criticalTickets * 6, 0, 100);
+        var lateRisk = Math.Clamp(14 + daysLate * 4.1 + criticalTickets * 1.8, 0, 100);
+        var overallRisk = Math.Clamp((churnRisk * 0.45) + (lateRisk * 0.35) + (Math.Abs(usageDrop) * 0.6), 0, 100);
+        var revenueRisk = Math.Clamp((overallRisk * 0.8) + (customer.MonthlyRevenue > 100000 ? 10 : 0), 0, 100);
+        var riskLevel = overallRisk >= 75 ? RiskLevel.Critical : overallRisk >= 55 ? RiskLevel.High : overallRisk >= 35 ? RiskLevel.Medium : RiskLevel.Low;
+
+        var contract = new Contract
+        {
+            CustomerId = customer.Id,
+            ContractType = customer.Segment == "Enterprise" ? "Annual Enterprise" : "Growth Plan",
+            ContractValue = customer.MonthlyRevenue * 12,
+            BillingCycle = "Monthly",
+            RenewalDate = customer.ContractEndDate,
+            IsAutoRenew = customer.Segment == "Enterprise",
+            Status = customer.Status
+        };
+
+        var payments = new List<Payment>
+        {
+            new()
+            {
+                CustomerId = customer.Id,
+                Amount = customer.MonthlyRevenue,
+                DueDate = new DateOnly(2026, 1, 5),
+                PaidDate = new DateOnly(2026, 1, 6),
+                Status = "Paid",
+                DaysLate = 1
+            },
+            new()
+            {
+                CustomerId = customer.Id,
+                Amount = customer.MonthlyRevenue,
+                DueDate = new DateOnly(2026, 2, 5),
+                PaidDate = daysLate > 0 ? new DateOnly(2026, 2, 5).AddDays(daysLate) : new DateOnly(2026, 2, 5),
+                Status = daysLate > 0 ? "Paid" : "Paid",
+                DaysLate = daysLate
+            },
+            new()
+            {
+                CustomerId = customer.Id,
+                Amount = customer.MonthlyRevenue,
+                DueDate = new DateOnly(2026, 3, 5),
+                PaidDate = daysLate >= 10 ? null : new DateOnly(2026, 3, 7),
+                Status = daysLate >= 10 ? "Overdue" : "Paid",
+                DaysLate = daysLate >= 10 ? daysLate : 2
+            }
+        };
+
+        var usageMetrics = new List<UsageMetric>
+        {
+            new()
+            {
+                CustomerId = customer.Id,
+                ReferenceMonth = new DateOnly(2026, 1, 1),
+                ActiveUsers = Math.Max(40, (int)(customer.MonthlyRevenue / 550)),
+                TotalSessions = Math.Max(1800, (int)(customer.MonthlyRevenue / 18)),
+                FeatureUsageScore = 82,
+                UsageVariationPercent = -4
+            },
+            new()
+            {
+                CustomerId = customer.Id,
+                ReferenceMonth = new DateOnly(2026, 2, 1),
+                ActiveUsers = Math.Max(36, (int)(customer.MonthlyRevenue / 600)),
+                TotalSessions = Math.Max(1600, (int)(customer.MonthlyRevenue / 19)),
+                FeatureUsageScore = 77,
+                UsageVariationPercent = usageDrop / 2.0
+            },
+            new()
+            {
+                CustomerId = customer.Id,
+                ReferenceMonth = new DateOnly(2026, 3, 1),
+                ActiveUsers = Math.Max(30, (int)(customer.MonthlyRevenue / 650)),
+                TotalSessions = Math.Max(1400, (int)(customer.MonthlyRevenue / 21)),
+                FeatureUsageScore = Math.Max(46, 78 - Math.Abs(usageDrop) / 2.0),
+                UsageVariationPercent = usageDrop
+            }
+        };
+
+        var tickets = Enumerable.Range(1, Math.Max(1, criticalTickets + 1))
+            .Select(index => new SupportTicket
+            {
+                CustomerId = customer.Id,
+                Severity = index <= criticalTickets ? "Critical" : "Medium",
+                Category = index <= criticalTickets ? "Platform Reliability" : "Enablement",
+                Status = index <= criticalTickets ? "Open" : "Resolved",
+                ResolutionTimeHours = index <= criticalTickets ? 18 + index * 6 : 6
+            })
+            .ToList();
+
+        var riskAssessment = new RiskAssessment
+        {
+            CustomerId = customer.Id,
+            OverallRiskScore = Math.Round(overallRisk, 1),
+            ChurnRiskScore = Math.Round(churnRisk, 1),
+            LatePaymentRiskScore = Math.Round(lateRisk, 1),
+            RevenueRiskScore = Math.Round(revenueRisk, 1),
+            RiskLevel = riskLevel,
+            Summary = $"Imported signals indicate usage variation of {usageDrop}%, {criticalTickets} critical tickets, and latest payment lateness of {daysLate} days."
+        };
+
+        var alerts = new List<Alert>();
+        if (daysLate >= 10)
+        {
+            alerts.Add(new Alert
+            {
+                CustomerId = customer.Id,
+                Type = "Late Payment",
+                Severity = AlertSeverity.Critical,
+                Title = "Imported overdue payment risk",
+                Description = $"Latest imported payment pattern indicates {daysLate} days late exposure."
+            });
+        }
+
+        if (usageDrop <= -20)
+        {
+            alerts.Add(new Alert
+            {
+                CustomerId = customer.Id,
+                Type = "Churn",
+                Severity = AlertSeverity.High,
+                Title = "Imported adoption decline detected",
+                Description = $"Usage metrics show a {usageDrop}% monthly variation."
+            });
+        }
+
+        if (customer.ContractEndDate.DayNumber - DateOnly.FromDateTime(DateTime.UtcNow).DayNumber <= 90)
+        {
+            alerts.Add(new Alert
+            {
+                CustomerId = customer.Id,
+                Type = "Renewal",
+                Severity = AlertSeverity.Warning,
+                Title = "Imported renewal window approaching",
+                Description = "Contract renewal is within the next 90 days."
+            });
+        }
+
+        var predictions = new List<Prediction>
+        {
+            new()
+            {
+                CustomerId = customer.Id,
+                PredictionType = "Churn",
+                Value = Math.Round(churnRisk / 100, 2),
+                Confidence = 0.82,
+                ModelVersion = "ingestion-baseline-v1"
+            },
+            new()
+            {
+                CustomerId = customer.Id,
+                PredictionType = "LatePayment",
+                Value = Math.Round(lateRisk / 100, 2),
+                Confidence = 0.84,
+                ModelVersion = "ingestion-baseline-v1"
+            },
+            new()
+            {
+                CustomerId = customer.Id,
+                PredictionType = "OverallRisk",
+                Value = Math.Round(overallRisk / 100, 2),
+                Confidence = 0.8,
+                ModelVersion = "ingestion-baseline-v1"
+            }
+        };
+
+        return new ImportedCustomerBundle(contract, payments, usageMetrics, tickets, riskAssessment, alerts, predictions);
+    }
+
+    private sealed record ImportedCustomerBundle(
+        Contract Contract,
+        IReadOnlyList<Payment> Payments,
+        IReadOnlyList<UsageMetric> UsageMetrics,
+        IReadOnlyList<SupportTicket> Tickets,
+        RiskAssessment RiskAssessment,
+        IReadOnlyList<Alert> Alerts,
+        IReadOnlyList<Prediction> Predictions);
 }

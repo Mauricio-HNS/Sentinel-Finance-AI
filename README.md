@@ -64,6 +64,7 @@ backend API (ASP.NET Core 8, Clean Architecture)
 - Clean Architecture keeps domain rules separate from transport and infrastructure concerns.
 - Demo seed services accelerate portfolio presentation while preserving a clear path to EF Core persistence.
 - Copilot responses are being shaped around structured AI objects, retrieval-backed evidence, and explicit eval trails.
+- CSV imports now create persisted customers plus initial contracts, payments, usage metrics, tickets, predictions, and alerts.
 
 ## Structure
 
