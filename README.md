@@ -40,6 +40,10 @@ Sentinel Finance AI is designed as a senior-level portfolio project with enterpr
 
 ![Sentinel Finance AI Customers](./docs/screenshots/customers.png)
 
+### AI Ops
+
+![Sentinel Finance AI AI Ops](./docs/screenshots/ai-ops.png)
+
 ## Product vision
 
 Sentinel turns fragmented finance and customer-health signals into a single decision surface for revenue, risk, and operations leaders.

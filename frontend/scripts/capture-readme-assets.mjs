@@ -11,7 +11,8 @@ const baseUrl = process.env.README_CAPTURE_BASE_URL ?? "http://127.0.0.1:3000";
 const pages = [
   { route: "/dashboard", file: "dashboard.png" },
   { route: "/login", file: "login.png" },
-  { route: "/customers", file: "customers.png" }
+  { route: "/customers", file: "customers.png" },
+  { route: "/ai-ops", file: "ai-ops.png" }
 ];
 
 const browser = await chromium.launch({ headless: true });
