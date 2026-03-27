@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getCustomerDetailViewModel } from "@/lib/api";
+import { getCustomerCopilotViewModel, getCustomerDetailViewModel } from "@/lib/api";
 
 const signalTone: Record<string, string> = {
   red: "bg-red-500/20 text-red-100",
@@ -9,7 +9,10 @@ const signalTone: Record<string, string> = {
 };
 
 export default async function CustomerDetailsPage({ params }: { params: { id: string } }) {
-  const customer = await getCustomerDetailViewModel(params.id);
+  const [customer, copilot] = await Promise.all([
+    getCustomerDetailViewModel(params.id),
+    getCustomerCopilotViewModel(params.id)
+  ]);
 
   return (
     <div className="space-y-4">
@@ -48,6 +51,50 @@ export default async function CustomerDetailsPage({ params }: { params: { id: st
           <div className="panel p-6">
             <h3 className="dashboard-title">AI Explanation</h3>
             <p className="mt-5 text-lg leading-8 text-slate-200">{customer.aiNarrative}</p>
+          </div>
+
+          <div className="panel p-6">
+            <div className="flex items-center justify-between gap-4">
+              <h3 className="dashboard-title">AI Copilot</h3>
+              <span className="metric-badge bg-sky-500/20 text-sky-100">{copilot.model}</span>
+            </div>
+            <p className="mt-4 text-sm uppercase tracking-[0.2em] text-slate-400">{copilot.question}</p>
+            <p className="mt-4 text-lg leading-8 text-slate-200">{copilot.answer}</p>
+
+            <div className="mt-6 grid gap-4 md:grid-cols-3">
+              {copilot.analysis.topSignals.map((signal) => (
+                <div key={signal.label} className="rounded-xl border border-white/10 bg-[#142338] p-4">
+                  <div className="text-sm text-slate-400">{signal.label}</div>
+                  <div className="mt-2 text-3xl font-semibold text-white">{signal.value}</div>
+                  <div className="mt-2 text-sm text-slate-400">Impact: {signal.impact}</div>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-6 grid gap-4 lg:grid-cols-2">
+              <div className="rounded-xl border border-white/10 bg-[#142338] p-4">
+                <div className="text-sm uppercase tracking-[0.2em] text-slate-400">Recommended actions</div>
+                <div className="mt-4 grid gap-3">
+                  {copilot.analysis.recommendedActions.map((action) => (
+                    <div key={action} className="rounded-lg bg-white/5 px-3 py-3 text-slate-200">{action}</div>
+                  ))}
+                </div>
+              </div>
+              <div className="rounded-xl border border-white/10 bg-[#142338] p-4">
+                <div className="text-sm uppercase tracking-[0.2em] text-slate-400">Knowledge retrieval</div>
+                <div className="mt-4 grid gap-3">
+                  {copilot.knowledge.map((item) => (
+                    <div key={item.title} className="rounded-lg bg-white/5 px-3 py-3">
+                      <div className="flex items-center justify-between gap-3">
+                        <div className="font-semibold text-white">{item.title}</div>
+                        <span className="metric-badge bg-slate-500/20 text-slate-100">{item.sourceType}</span>
+                      </div>
+                      <div className="mt-2 text-sm leading-6 text-slate-300">{item.snippet}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
 
           <div className="panel overflow-hidden">

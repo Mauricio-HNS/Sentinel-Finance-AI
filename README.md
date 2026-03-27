@@ -38,6 +38,7 @@ Sentinel turns fragmented finance and customer-health signals into a single deci
 - Executive dashboard with portfolio KPIs
 - Customer portfolio list and customer detail view
 - Composite risk scoring and category-level risk scores
+- AI copilot on the customer detail experience
 - Churn and late payment prediction service
 - Alert center for critical accounts
 - Scenario simulator
@@ -62,6 +63,7 @@ backend API (ASP.NET Core 8, Clean Architecture)
 - Prediction logic is isolated in FastAPI so scoring can evolve independently from the transactional API.
 - Clean Architecture keeps domain rules separate from transport and infrastructure concerns.
 - Demo seed services accelerate portfolio presentation while preserving a clear path to EF Core persistence.
+- Copilot responses are being shaped around structured AI objects, retrieval-backed evidence, and explicit eval trails.
 
 ## Structure
 

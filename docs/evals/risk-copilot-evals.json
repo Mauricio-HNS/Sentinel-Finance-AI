@@ -1,0 +1,29 @@
+[
+  {
+    "evaluationName": "customer_risk_driver_summary",
+    "scenario": "High-risk customer with payment slippage, usage drop, and critical support incidents",
+    "expectedBehavior": "Model identifies the top three risk drivers and recommends coordinated collections and customer success action",
+    "scorecard": "groundedness, actionability, executive_clarity",
+    "status": "READY",
+    "modelTarget": "responses-api-structured-output",
+    "updatedAt": "2026-03-27T20:30:00Z"
+  },
+  {
+    "evaluationName": "renewal_watch_guidance",
+    "scenario": "Moderate-risk customer approaching renewal with soft adoption but healthy billing",
+    "expectedBehavior": "Model distinguishes renewal exposure from delinquency risk and avoids overstating payment pressure",
+    "scorecard": "risk_separation, calibration, factuality",
+    "status": "READY",
+    "modelTarget": "responses-api-structured-output",
+    "updatedAt": "2026-03-27T20:31:00Z"
+  },
+  {
+    "evaluationName": "ticket_grounding_check",
+    "scenario": "Copilot answers must reference support evidence when support incidents are the main driver",
+    "expectedBehavior": "Model cites ticket-derived evidence and does not fabricate unsupported causes",
+    "scorecard": "retrieval_grounding, citation_quality, hallucination_resistance",
+    "status": "READY",
+    "modelTarget": "responses-api-file-search",
+    "updatedAt": "2026-03-27T20:32:00Z"
+  }
+]

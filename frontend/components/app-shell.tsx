@@ -27,7 +27,6 @@ export function AppShell({ children }: { children: ReactNode }) {
             </div>
           </div>
           <div className="flex items-center gap-5 text-slate-300">
-            <Bell className="h-5 w-5" />
             <div className="relative">
               <Bell className="h-5 w-5" />
               <span className="absolute -right-1 -top-1 h-3 w-3 rounded-full bg-red-500" />

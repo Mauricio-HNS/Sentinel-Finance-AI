@@ -11,6 +11,9 @@ public static class DependencyInjection
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddSingleton<DemoDataStore>();
+        services.AddSingleton<IKnowledgeRetrievalService, FileKnowledgeRetrievalService>();
+        services.AddSingleton<IEvalsTrailService, FileEvalsTrailService>();
+        services.AddSingleton<IAICopilotGateway, FallbackAICopilotGateway>();
         services.AddSingleton<ISentinelReadService, DemoSentinelReadService>();
         services.AddHttpClient<IPredictionGateway, PredictionGateway>(client =>
         {

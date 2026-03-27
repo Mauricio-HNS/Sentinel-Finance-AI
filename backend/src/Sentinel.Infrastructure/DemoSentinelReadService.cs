@@ -3,7 +3,12 @@ using Sentinel.Domain;
 
 namespace Sentinel.Infrastructure;
 
-public sealed class DemoSentinelReadService(DemoDataStore store, IExplanationGateway explanationGateway) : ISentinelReadService
+public sealed class DemoSentinelReadService(
+    DemoDataStore store,
+    IExplanationGateway explanationGateway,
+    IKnowledgeRetrievalService knowledgeRetrievalService,
+    IEvalsTrailService evalsTrailService,
+    IAICopilotGateway aiCopilotGateway) : ISentinelReadService
 {
     public ExecutiveDashboardDto GetDashboard()
     {
@@ -94,6 +99,36 @@ public sealed class DemoSentinelReadService(DemoDataStore store, IExplanationGat
         var generated = explanationGateway.GenerateAsync(request.Context).GetAwaiter().GetResult();
         return new ExplanationResponse(request.CustomerId, generated);
     }
+
+    public CopilotResponseDto GetCopilotBriefing(Guid customerId, string? question = null)
+    {
+        var detail = GetCustomer(customerId);
+        if (detail is null)
+        {
+            return new CopilotResponseDto(
+                customerId,
+                question ?? "What is driving current risk?",
+                "Customer not found.",
+                "fallback-structured-copilot",
+                DateTime.UtcNow,
+                new StructuredRiskExplanationDto("Customer not found.", "Unknown", 0, [], [], []),
+                []);
+        }
+
+        var prompt = question ?? "What is driving current risk and what should leadership do next?";
+        var knowledge = knowledgeRetrievalService.Retrieve(customerId, detail.Customer.Name, prompt);
+        return aiCopilotGateway.GenerateAsync(detail, prompt, knowledge).GetAwaiter().GetResult();
+    }
+
+    public IReadOnlyList<KnowledgeChunkDto> GetKnowledgeBase(Guid customerId)
+    {
+        var detail = GetCustomer(customerId);
+        return detail is null
+            ? []
+            : knowledgeRetrievalService.Retrieve(customerId, detail.Customer.Name, "contracts tickets support renewal risk");
+    }
+
+    public IReadOnlyList<EvalRecordDto> GetRecentEvals() => evalsTrailService.GetRecent();
 
     public PredictionResponse RecalculateRisk(Guid customerId)
     {

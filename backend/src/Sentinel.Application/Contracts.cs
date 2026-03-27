@@ -56,3 +56,29 @@ public sealed record ExplanationRequest(Guid CustomerId, string Context);
 public sealed record ExplanationResponse(Guid CustomerId, string Explanation);
 public sealed record ScenarioSimulationRequest(Guid CustomerId, int DaysLate, double UsageVariationPercent, int CriticalTickets, bool ContractExpiringSoon);
 public sealed record PredictionResponse(string PredictionType, double Score, double Confidence, string ModelVersion, string Narrative);
+public sealed record CopilotQuestionRequest(Guid CustomerId, string Question);
+public sealed record CopilotSignalDto(string Label, string Value, string Impact);
+public sealed record KnowledgeChunkDto(string Title, string SourceType, string Path, string Snippet, double Score);
+public sealed record StructuredRiskExplanationDto(
+    string ExecutiveSummary,
+    string RiskLevel,
+    double Confidence,
+    IReadOnlyList<CopilotSignalDto> TopSignals,
+    IReadOnlyList<string> RecommendedActions,
+    IReadOnlyList<string> FollowUpQuestions);
+public sealed record CopilotResponseDto(
+    Guid CustomerId,
+    string Question,
+    string Answer,
+    string Model,
+    DateTime GeneratedAt,
+    StructuredRiskExplanationDto Analysis,
+    IReadOnlyList<KnowledgeChunkDto> Knowledge);
+public sealed record EvalRecordDto(
+    string EvaluationName,
+    string Scenario,
+    string ExpectedBehavior,
+    string Scorecard,
+    string Status,
+    string ModelTarget,
+    DateTime UpdatedAt);

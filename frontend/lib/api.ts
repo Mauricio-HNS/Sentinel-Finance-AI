@@ -66,6 +66,29 @@ type ApiAlert = {
   isResolved: boolean;
 };
 
+type ApiCopilot = {
+  customerId: string;
+  question: string;
+  answer: string;
+  model: string;
+  generatedAt: string;
+  analysis: {
+    executiveSummary: string;
+    riskLevel: string;
+    confidence: number;
+    topSignals: Array<{ label: string; value: string; impact: string }>;
+    recommendedActions: string[];
+    followUpQuestions: string[];
+  };
+  knowledge: Array<{
+    title: string;
+    sourceType: string;
+    path: string;
+    snippet: string;
+    score: number;
+  }>;
+};
+
 async function safeFetch<T>(path: string): Promise<T | null> {
   try {
     const response = await fetch(`${apiBaseUrl}${path}`, {
@@ -222,4 +245,56 @@ export async function getAlertsViewModel() {
     type: alert.type,
     status: alert.isResolved ? "Resolved" : "Open"
   }));
+}
+
+export async function getCustomerCopilotViewModel(id: string) {
+  const apiCopilot = await safeFetch<ApiCopilot>(`/api/ai/copilot/customer/${id}`);
+  if (!apiCopilot) {
+    return {
+      question: "What is driving current risk and what should leadership do next?",
+      answer:
+        "Current risk is being driven by a compounding pattern of payment delay, weakening adoption, and critical support volume. Leadership should run a coordinated collections, product recovery, and renewal-containment plan.",
+      model: "fallback-structured-copilot",
+      analysis: {
+        executiveSummary:
+          "The account is in a fragile state because billing pressure, product adoption decline, and service instability are reinforcing each other.",
+        riskLevel: "Critical",
+        confidence: 0.84,
+        topSignals: [
+          { label: "Payment delay", value: "12 days", impact: "high" },
+          { label: "Usage variation", value: "-32%", impact: "high" },
+          { label: "Critical tickets", value: "4", impact: "high" }
+        ],
+        recommendedActions: [
+          "Coordinate collections and customer success outreach within 24 hours.",
+          "Stabilize unresolved critical incidents before renewal negotiation.",
+          "Create an executive recovery plan tied to adoption improvement."
+        ],
+        followUpQuestions: [
+          "Which support themes are hurting stakeholder trust most?",
+          "Should we escalate this account into a renewal war room?"
+        ]
+      },
+      knowledge: [
+        {
+          title: "alpha-capital-renewal-playbook",
+          sourceType: "contract",
+          snippet: "Trigger executive review if platform adoption falls more than 20 percent over a rolling 90-day window."
+        },
+        {
+          title: "alpha-capital-support-patterns",
+          sourceType: "ticket",
+          snippet: "Repeated critical incidents correlate with declining stakeholder confidence and reduced weekly active usage."
+        }
+      ]
+    };
+  }
+
+  return {
+    question: apiCopilot.question,
+    answer: apiCopilot.answer,
+    model: apiCopilot.model,
+    analysis: apiCopilot.analysis,
+    knowledge: apiCopilot.knowledge
+  };
 }
