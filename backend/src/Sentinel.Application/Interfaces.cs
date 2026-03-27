@@ -11,6 +11,8 @@ public interface ISentinelReadService
     CopilotResponseDto GetCopilotBriefing(Guid customerId, string? question = null);
     IReadOnlyList<KnowledgeChunkDto> GetKnowledgeBase(Guid customerId);
     IReadOnlyList<EvalRecordDto> GetRecentEvals();
+    AiPlatformStatusDto GetAiStatus();
+    EvalRunResponseDto RunRiskCopilotEval();
     PredictionResponse RecalculateRisk(Guid customerId);
     PredictionResponse RunSimulation(ScenarioSimulationRequest request);
     CsvUploadResponse Upload(string fileName, Stream stream);
@@ -25,21 +27,26 @@ public interface IPredictionGateway
 
 public interface IExplanationGateway
 {
+    string Mode { get; }
     Task<string> GenerateAsync(string context, CancellationToken cancellationToken = default);
 }
 
 public interface IKnowledgeRetrievalService
 {
+    string Mode { get; }
     IReadOnlyList<KnowledgeChunkDto> Retrieve(Guid customerId, string customerName, string question, int take = 4);
 }
 
 public interface IEvalsTrailService
 {
+    string Mode { get; }
     IReadOnlyList<EvalRecordDto> GetRecent();
+    Task<EvalRunResponseDto> RunRiskCopilotEvalAsync(CancellationToken cancellationToken = default);
 }
 
 public interface IAICopilotGateway
 {
+    string Mode { get; }
     Task<CopilotResponseDto> GenerateAsync(
         CustomerDetailDto detail,
         string question,

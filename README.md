@@ -77,9 +77,9 @@ Sentinel is intentionally framed as a modern financial intelligence system, not 
 
 - `AI Copilot`: customer-level executive briefings with answer, summary, signals, actions, and follow-up questions
 - `Structured Outputs`: the backend requests schema-shaped JSON so the UI can render deterministic risk objects
-- `Knowledge Retrieval`: local contract, ticket, and playbook artifacts are retrieved as evidence for the copilot
+- `Knowledge Retrieval`: local contract, ticket, and playbook artifacts are retrieved as evidence today, with an OpenAI `file_search` path ready for vector-store-backed retrieval
 - `Prediction Service`: FastAPI isolates scoring and risk heuristics so the .NET API can evolve into an orchestration layer
-- `Eval Trail`: evaluation scenarios document whether the copilot behavior stays aligned as prompts and models evolve
+- `Eval Trail`: evaluation scenarios document whether the copilot behavior stays aligned as prompts and models evolve, with an eval-run path ready for smoke tests
 - `Observability`: OpenTelemetry keeps the path open for tracing cross-service inference flows
 
 ## AI and platform stack
@@ -88,6 +88,7 @@ Sentinel is intentionally framed as a modern financial intelligence system, not 
 - structured JSON schema outputs for executive risk narratives
 - retrieval-style grounding over contracts, ticket intelligence, and operating playbooks
 - evaluation trail ready for continuous AI quality checks
+- vector-store-ready retrieval and eval-run orchestration hooks
 - FastAPI prediction service for decoupled risk modeling
 - ASP.NET Core 8 + Clean Architecture for orchestration and domain boundaries
 - PostgreSQL + EF Core persistence layer
@@ -146,6 +147,8 @@ When the key is present, the backend can use the OpenAI Responses API for:
 - executive explanations
 - structured customer copilot briefings
 - schema-safe AI objects for the frontend
+- vector-store-backed retrieval via `OPENAI_VECTOR_STORE_ID`
+- eval smoke runs via `OPENAI_RISK_COPILOT_EVAL_ID`
 
 Without a key, Sentinel falls back to deterministic local logic so the demo still works.
 
@@ -164,7 +167,8 @@ Additional UI flows for customers, alerts, simulator, and upload are scaffolded 
 
 ### V2
 
-- vector store or file-search backed retrieval instead of local markdown retrieval
+- frontend AI ops panel consuming `/api/ai/status`
+- richer vector store/file-search grounding with uploaded enterprise documents
 - real OpenAI eval runs and prompt versioning
 - Redis-backed caching
 - richer auth and async recalculation jobs

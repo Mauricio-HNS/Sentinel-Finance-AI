@@ -17,7 +17,9 @@ public static class DependencyInjection
         {
             Model = configuration["OpenAI:Model"] ?? configuration["OPENAI_MODEL"] ?? "gpt-4.1-mini",
             ApiKey = configuration["OpenAI:ApiKey"] ?? configuration["OPENAI_API_KEY"] ?? string.Empty,
-            BaseUrl = configuration["OpenAI:BaseUrl"] ?? "https://api.openai.com/v1/"
+            BaseUrl = configuration["OpenAI:BaseUrl"] ?? "https://api.openai.com/v1/",
+            VectorStoreId = configuration["OpenAI:VectorStoreId"] ?? configuration["OPENAI_VECTOR_STORE_ID"],
+            RiskCopilotEvalId = configuration["OpenAI:RiskCopilotEvalId"] ?? configuration["OPENAI_RISK_COPILOT_EVAL_ID"]
         };
 
         services.AddSingleton<DemoDataStore>();
@@ -25,14 +27,24 @@ public static class DependencyInjection
             options.UseNpgsql(configuration.GetConnectionString("Postgres")));
         services.AddScoped<AppDbSeeder>();
         services.AddSingleton(openAiOptions);
+        services.AddSingleton<FileKnowledgeRetrievalService>();
+        services.AddSingleton<FileEvalsTrailService>();
         services.AddSingleton<FallbackAICopilotGateway>();
         services.AddSingleton<FallbackExplanationGateway>();
-        services.AddSingleton<IKnowledgeRetrievalService, FileKnowledgeRetrievalService>();
-        services.AddSingleton<IEvalsTrailService, FileEvalsTrailService>();
         services.AddHttpClient<OpenAiResponsesGateway>(client =>
         {
             client.BaseAddress = new Uri(openAiOptions.BaseUrl);
         });
+        services.AddHttpClient<OpenAiFileSearchKnowledgeRetrievalService>(client =>
+        {
+            client.BaseAddress = new Uri(openAiOptions.BaseUrl);
+        });
+        services.AddHttpClient<OpenAiEvalsTrailService>(client =>
+        {
+            client.BaseAddress = new Uri(openAiOptions.BaseUrl);
+        });
+        services.AddScoped<IKnowledgeRetrievalService>(provider => provider.GetRequiredService<OpenAiFileSearchKnowledgeRetrievalService>());
+        services.AddScoped<IEvalsTrailService>(provider => provider.GetRequiredService<OpenAiEvalsTrailService>());
         services.AddScoped<IAICopilotGateway>(provider => provider.GetRequiredService<OpenAiResponsesGateway>());
         services.AddScoped<ISentinelReadService, PersistentSentinelReadService>();
         services.AddHttpClient<IPredictionGateway, PredictionGateway>(client =>

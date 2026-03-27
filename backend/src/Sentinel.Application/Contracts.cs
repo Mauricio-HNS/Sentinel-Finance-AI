@@ -83,3 +83,19 @@ public sealed record EvalRecordDto(
     string Status,
     string ModelTarget,
     DateTime UpdatedAt);
+public sealed record AiPlatformStatusDto(
+    string CopilotMode,
+    string ExplanationMode,
+    string RetrievalMode,
+    string EvalMode,
+    bool OpenAiConfigured,
+    bool VectorStoreConfigured,
+    bool EvalSuiteConfigured);
+public sealed record EvalRunResponseDto(
+    string Mode,
+    string Status,
+    string Target,
+    string Summary,
+    DateTime RequestedAt,
+    string? RunId,
+    string? ReportUrl);

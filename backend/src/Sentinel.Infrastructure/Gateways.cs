@@ -12,6 +12,8 @@ public sealed class OpenAIOptions
     public string Model { get; init; } = "gpt-4.1-mini";
     public string ApiKey { get; init; } = string.Empty;
     public string BaseUrl { get; init; } = "https://api.openai.com/v1/";
+    public string? VectorStoreId { get; init; }
+    public string? RiskCopilotEvalId { get; init; }
 }
 
 public sealed class PredictionGateway(HttpClient httpClient) : IPredictionGateway
@@ -27,6 +29,8 @@ public sealed class PredictionGateway(HttpClient httpClient) : IPredictionGatewa
 
 public sealed class FallbackExplanationGateway : IExplanationGateway
 {
+    public string Mode => "deterministic-fallback-explainer";
+
     public Task<string> GenerateAsync(string context, CancellationToken cancellationToken = default)
     {
         var summary = $"Customer shows elevated financial risk due to {context.Trim().TrimEnd('.')}.";
@@ -40,6 +44,8 @@ public sealed class OpenAiResponsesGateway(
     FallbackAICopilotGateway fallbackCopilotGateway,
     FallbackExplanationGateway fallbackExplanationGateway) : IAICopilotGateway, IExplanationGateway
 {
+    public string Mode => IsConfigured() ? "openai-responses-structured" : fallbackCopilotGateway.Mode;
+
     public async Task<string> GenerateAsync(string context, CancellationToken cancellationToken = default)
     {
         if (!IsConfigured())

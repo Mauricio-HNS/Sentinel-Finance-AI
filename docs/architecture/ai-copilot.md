@@ -17,20 +17,23 @@ Sentinel Finance AI is evolving toward an AI-native risk intelligence platform w
 ## Current repository implementation
 
 - `backend/src/Sentinel.Api/Controllers/AiController.cs`
-  Exposes AI endpoints for explanations, copilot briefings, retrieval, and eval visibility.
+  Exposes AI endpoints for explanations, copilot briefings, retrieval, AI platform status, and eval execution.
 - `backend/src/Sentinel.Infrastructure/AIInfrastructure.cs`
-  Provides a local retrieval service, eval trail reader, and structured copilot fallback.
+  Provides local fallback retrieval and eval services plus OpenAI-aligned file-search and eval-run adapters.
+- `backend/src/Sentinel.Infrastructure/Gateways.cs`
+  Contains the OpenAI Responses API integration path for structured copilot generation and executive explanations.
 - `docs/knowledge/`
   Stores contract, ticket, and operating-model artifacts used by retrieval.
 - `docs/evals/risk-copilot-evals.json`
   Stores the current eval suite definition for copilot quality tracking.
 
-## Planned OpenAI-aligned evolution
+## OpenAI-aligned evolution now represented in code
 
-- Replace local fallback copilot generation with a Responses API adapter.
-- Use structured outputs for the executive risk schema.
-- Move retrieval from local markdown search to vector-backed file search.
-- Connect eval scenarios to a continuous model quality workflow.
+- Responses API path for structured copilot generation
+- schema-safe explanations and risk briefings
+- vector-store-ready retrieval path using `file_search`
+- eval-run orchestration path for smoke-testing the risk copilot
+- local fallbacks so the demo still runs without external secrets
 
 ## Official references
 

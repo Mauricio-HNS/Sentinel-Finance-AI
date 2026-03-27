@@ -131,6 +131,20 @@ public sealed class DemoSentinelReadService(
 
     public IReadOnlyList<EvalRecordDto> GetRecentEvals() => evalsTrailService.GetRecent();
 
+    public AiPlatformStatusDto GetAiStatus() => new(
+        aiCopilotGateway.Mode,
+        explanationGateway.Mode,
+        knowledgeRetrievalService.Mode,
+        evalsTrailService.Mode,
+        aiCopilotGateway.Mode.StartsWith("openai", StringComparison.OrdinalIgnoreCase) ||
+        explanationGateway.Mode.StartsWith("openai", StringComparison.OrdinalIgnoreCase),
+        knowledgeRetrievalService.Mode.Contains("file-search", StringComparison.OrdinalIgnoreCase),
+        evalsTrailService.Mode.Contains("eval", StringComparison.OrdinalIgnoreCase) &&
+        !evalsTrailService.Mode.StartsWith("local", StringComparison.OrdinalIgnoreCase));
+
+    public EvalRunResponseDto RunRiskCopilotEval() =>
+        evalsTrailService.RunRiskCopilotEvalAsync().GetAwaiter().GetResult();
+
     public PredictionResponse RecalculateRisk(Guid customerId)
     {
         var detail = GetCustomer(customerId);

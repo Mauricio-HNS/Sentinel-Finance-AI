@@ -18,6 +18,12 @@ public sealed class AiController(ISentinelReadService service) : ControllerBase
     [HttpGet("knowledge/customer/{customerId:guid}")]
     public ActionResult<IReadOnlyList<KnowledgeChunkDto>> GetKnowledge(Guid customerId) => Ok(service.GetKnowledgeBase(customerId));
 
+    [HttpGet("status")]
+    public ActionResult<AiPlatformStatusDto> GetStatus() => Ok(service.GetAiStatus());
+
     [HttpGet("evals/recent")]
     public ActionResult<IReadOnlyList<EvalRecordDto>> GetRecentEvals() => Ok(service.GetRecentEvals());
+
+    [HttpPost("evals/run-risk-copilot")]
+    public ActionResult<EvalRunResponseDto> RunRiskCopilotEval() => Ok(service.RunRiskCopilotEval());
 }
