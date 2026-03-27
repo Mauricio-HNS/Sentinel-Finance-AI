@@ -1,0 +1,13 @@
+@Sentinel.Api_HostAddress = http://localhost:5147
+
+#if (EnableOpenAPI)
+GET {{Sentinel.Api_HostAddress}}/openapi/v1.json
+Accept: application/json
+
+###
+#endif
+
+GET {{Sentinel.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

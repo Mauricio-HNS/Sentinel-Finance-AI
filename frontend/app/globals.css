@@ -1,0 +1,50 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  @apply bg-ink text-slate-100 antialiased;
+  background-image:
+    radial-gradient(circle at top center, rgba(88, 119, 175, 0.18), transparent 34%),
+    radial-gradient(circle at bottom left, rgba(34, 58, 99, 0.26), transparent 26%),
+    linear-gradient(180deg, #0a1425 0%, #0b1423 52%, #0a1322 100%);
+  min-height: 100vh;
+}
+
+.shell {
+  @apply mx-auto max-w-7xl px-6 py-8;
+}
+
+.glass {
+  @apply rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl;
+}
+
+.panel {
+  @apply rounded-xl border border-[#304564] bg-[#18263d]/95 shadow-[0_12px_30px_rgba(3,10,24,0.28)];
+}
+
+.metric-card {
+  @apply panel px-5 py-4;
+}
+
+.metric-badge {
+  @apply inline-flex items-center rounded-md px-3 py-1 text-sm font-semibold;
+}
+
+.dashboard-title {
+  @apply text-[1.9rem] font-semibold tracking-tight text-slate-50;
+}
+
+.thin-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.thin-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.25);
+  border-radius: 999px;
+}

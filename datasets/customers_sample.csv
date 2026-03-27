@@ -1,0 +1,4 @@
+Id,Name,Segment,Country,Industry,MonthlyRevenue,CurrentPlan,ContractStartDate,ContractEndDate,Status
+f0b50a84-cad7-4dcc-9f42-16fd5de2f101,Alpha Capital Partners,Enterprise,United States,Fintech,182000,Enterprise Pulse,2024-01-01,2026-05-30,Active
+f0b50a84-cad7-4dcc-9f42-16fd5de2f102,Nova Retail Cloud,Mid-Market,Brazil,Retail Tech,76000,Growth Shield,2024-06-01,2026-04-20,Active
+f0b50a84-cad7-4dcc-9f42-16fd5de2f103,Orbit Manufacturing Hub,Enterprise,Germany,Industrial SaaS,129000,Enterprise Pulse,2023-09-01,2026-06-15,Active

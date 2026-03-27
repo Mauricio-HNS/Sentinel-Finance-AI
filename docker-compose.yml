@@ -1,0 +1,52 @@
+version: "3.9"
+
+services:
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    environment:
+      NEXT_PUBLIC_API_BASE_URL: http://localhost:8080
+    depends_on:
+      - api
+
+  api:
+    build:
+      context: ./backend/src
+      dockerfile: Sentinel.Api/Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      ASPNETCORE_URLS: http://+:8080
+      ConnectionStrings__Postgres: Host=postgres;Port=5432;Database=sentinel_finance;Username=sentinel;Password=sentinel
+      ConnectionStrings__Redis: redis:6379
+      ExternalServices__PredictionBaseUrl: http://prediction-service:8000
+      OpenAI__ApiKey: ${OPENAI_API_KEY:-}
+    depends_on:
+      - postgres
+      - redis
+      - prediction-service
+
+  prediction-service:
+    build: ./prediction-service
+    ports:
+      - "8000:8000"
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: sentinel_finance
+      POSTGRES_USER: sentinel
+      POSTGRES_PASSWORD: sentinel
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+volumes:
+  postgres-data:
