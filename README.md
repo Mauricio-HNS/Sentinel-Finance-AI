@@ -4,6 +4,16 @@
 
 Sentinel Finance AI is designed as a senior-level portfolio project with enterprise SaaS positioning, clean architecture, premium UI direction, and clear expansion paths for future AI and analytics capabilities.
 
+## Screenshots
+
+### Dashboard
+
+![Sentinel Finance AI Dashboard](./docs/screenshots/dashboard.png)
+
+### Login
+
+![Sentinel Finance AI Login](./docs/screenshots/login.png)
+
 ## Product vision
 
 Sentinel turns fragmented finance and customer-health signals into a single decision surface for revenue, risk, and operations leaders.
@@ -64,10 +74,7 @@ cp .env.example .env
 docker compose up --build
 ```
 
-## Screenshots
-
-- Login, dashboard, customers, alerts, simulator, and upload flows are scaffolded in `frontend/app/`.
-- Repository image assets can be added later in a `/docs/screenshots` folder as the UI is refined.
+Additional UI flows for customers, alerts, simulator, and upload are scaffolded in `frontend/app/`.
 
 ## Roadmap
 
