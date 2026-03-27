@@ -1,3 +1,4 @@
+// ---Made By Destiny7 Softwares---
 namespace Sentinel.Application;
 
 public interface ISentinelReadService

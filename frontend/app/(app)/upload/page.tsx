@@ -1,3 +1,4 @@
+// ---Made By Destiny7 Softwares---
 import { uploadCards } from "@/lib/mock-data";
 
 export default function UploadPage() {

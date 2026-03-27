@@ -1,3 +1,4 @@
+// ---Made By Destiny7 Softwares---
 import { simulatorPresets } from "@/lib/mock-data";
 
 export default function SimulatorPage() {

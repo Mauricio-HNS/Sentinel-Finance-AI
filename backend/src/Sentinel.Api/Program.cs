@@ -1,5 +1,7 @@
+// ---Made By Destiny7 Softwares---
 using Sentinel.Application;
 using Sentinel.Infrastructure;
+using Sentinel.Infrastructure.Persistence;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,6 +31,12 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var seeder = scope.ServiceProvider.GetRequiredService<AppDbSeeder>();
+    await seeder.SeedAsync();
+}
 
 if (app.Environment.IsDevelopment())
 {

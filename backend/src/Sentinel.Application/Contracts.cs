@@ -1,3 +1,4 @@
+// ---Made By Destiny7 Softwares---
 using Sentinel.Domain;
 
 namespace Sentinel.Application;

@@ -1,3 +1,4 @@
+// ---Made By Destiny7 Softwares---
 import { alerts as mockAlerts, customers as mockCustomers, dashboard as mockDashboard } from "@/lib/mock-data";
 
 const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8080";

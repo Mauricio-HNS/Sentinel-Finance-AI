@@ -1,3 +1,4 @@
+// ---Made By Destiny7 Softwares---
 export function KpiCard({ label, value, caption }: { label: string; value: string; caption: string }) {
   return (
     <div className="glass p-5">

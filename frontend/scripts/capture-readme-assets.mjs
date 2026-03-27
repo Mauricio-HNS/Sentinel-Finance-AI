@@ -1,3 +1,4 @@
+// ---Made By Destiny7 Softwares---
 import { chromium, devices } from "playwright";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
