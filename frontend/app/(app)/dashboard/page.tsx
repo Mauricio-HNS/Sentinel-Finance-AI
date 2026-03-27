@@ -1,4 +1,4 @@
-import { dashboard } from "@/lib/mock-data";
+import { getDashboardViewModel } from "@/lib/api";
 
 const badgeStyles: Record<string, string> = {
   red: "bg-red-500/20 text-red-200",
@@ -36,7 +36,9 @@ function MetricCard({
   );
 }
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
+  const dashboard = await getDashboardViewModel();
+
   return (
     <div className="space-y-4">
       <section className="grid gap-4 xl:grid-cols-6">

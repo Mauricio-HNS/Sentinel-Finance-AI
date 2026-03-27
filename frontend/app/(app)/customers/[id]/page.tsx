@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { customers } from "@/lib/mock-data";
+import { getCustomerDetailViewModel } from "@/lib/api";
 
 const signalTone: Record<string, string> = {
   red: "bg-red-500/20 text-red-100",
@@ -8,8 +8,8 @@ const signalTone: Record<string, string> = {
   green: "bg-emerald-500/20 text-emerald-100"
 };
 
-export default function CustomerDetailsPage({ params }: { params: { id: string } }) {
-  const customer = customers.find((item) => item.id === params.id) ?? customers[0];
+export default async function CustomerDetailsPage({ params }: { params: { id: string } }) {
+  const customer = await getCustomerDetailViewModel(params.id);
 
   return (
     <div className="space-y-4">

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { customers } from "@/lib/mock-data";
+import { getCustomersViewModel } from "@/lib/api";
 
 const toneClasses: Record<string, string> = {
   Healthy: "bg-emerald-500/20 text-emerald-100",
@@ -7,7 +7,9 @@ const toneClasses: Record<string, string> = {
   "Renewal Watch": "bg-orange-500/20 text-orange-100"
 };
 
-export default function CustomersPage() {
+export default async function CustomersPage() {
+  const customers = await getCustomersViewModel();
+
   return (
     <div className="space-y-4">
       <div className="grid gap-4 xl:grid-cols-[1.1fr_0.9fr]">

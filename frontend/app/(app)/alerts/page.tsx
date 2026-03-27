@@ -1,4 +1,5 @@
-import { alertStats, alerts } from "@/lib/mock-data";
+import { getAlertsViewModel } from "@/lib/api";
+import { alertStats } from "@/lib/mock-data";
 
 const severityTone: Record<string, string> = {
   Critical: "bg-red-500/20 text-red-100",
@@ -6,7 +7,9 @@ const severityTone: Record<string, string> = {
   Warning: "bg-amber-500/20 text-amber-100"
 };
 
-export default function AlertsPage() {
+export default async function AlertsPage() {
+  const alerts = await getAlertsViewModel();
+
   return (
     <div className="space-y-4">
       <div className="grid gap-4 xl:grid-cols-[1.1fr_0.9fr]">
