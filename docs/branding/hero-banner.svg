@@ -1,0 +1,50 @@
+<svg width="1600" height="560" viewBox="0 0 1600 560" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1600" height="560" rx="32" fill="#091321"/>
+  <rect width="1600" height="560" rx="32" fill="url(#bg)"/>
+  <circle cx="1262" cy="104" r="296" fill="url(#glowA)" fill-opacity="0.75"/>
+  <circle cx="210" cy="510" r="280" fill="url(#glowB)" fill-opacity="0.55"/>
+  <circle cx="1000" cy="320" r="210" fill="url(#glowC)" fill-opacity="0.45"/>
+  <rect x="78" y="72" width="128" height="128" rx="28" fill="#14233A" stroke="#365173"/>
+  <path d="M111.5 104.5H172.5L142 171L111.5 104.5Z" fill="#EAF4FF"/>
+  <path d="M123.5 111.5H160L141.5 152.5L123.5 111.5Z" fill="#5ED0B1"/>
+  <rect x="78" y="236" width="548" height="182" rx="22" fill="#14233A" stroke="#2A3F5E"/>
+  <rect x="106" y="269" width="226" height="26" rx="8" fill="#203452"/>
+  <rect x="106" y="314" width="452" height="16" rx="8" fill="#243A59"/>
+  <rect x="106" y="344" width="406" height="16" rx="8" fill="#243A59"/>
+  <rect x="106" y="374" width="370" height="16" rx="8" fill="#243A59"/>
+  <rect x="970" y="94" width="462" height="116" rx="22" fill="#14233A" stroke="#2A3F5E"/>
+  <rect x="970" y="236" width="462" height="116" rx="22" fill="#14233A" stroke="#2A3F5E"/>
+  <rect x="970" y="378" width="462" height="104" rx="22" fill="#14233A" stroke="#2A3F5E"/>
+  <path d="M1008 168C1036 158 1066 152 1099 142C1120 135 1141 120 1168 122C1208 124 1225 149 1259 155C1296 162 1326 131 1362 132C1386 133 1409 150 1432 154" stroke="#F6A14A" stroke-width="8" stroke-linecap="round"/>
+  <path d="M1008 318C1044 302 1088 285 1129 288C1167 290 1190 318 1228 319C1262 320 1286 292 1320 288C1355 284 1390 295 1432 304" stroke="#70D4B0" stroke-width="8" stroke-linecap="round"/>
+  <text x="246" y="129" fill="#F8FBFF" font-family="Arial, sans-serif" font-size="54" font-weight="700">Sentinel Finance AI</text>
+  <text x="246" y="176" fill="#A9BAD1" font-family="Arial, sans-serif" font-size="28">Financial Risk Intelligence Platform</text>
+  <text x="106" y="289" fill="#F8FBFF" font-family="Arial, sans-serif" font-size="20" font-weight="700">Predict churn, payment delays, revenue exposure, and account instability</text>
+  <text x="106" y="432" fill="#95A9C5" font-family="Arial, sans-serif" font-size="22">Enterprise SaaS portfolio project with premium UI, .NET Clean Architecture, FastAPI scoring, and AI-ready explanations.</text>
+  <text x="998" y="130" fill="#DCE8F8" font-family="Arial, sans-serif" font-size="24" font-weight="700">Executive Dashboard</text>
+  <text x="998" y="272" fill="#DCE8F8" font-family="Arial, sans-serif" font-size="24" font-weight="700">Risk Overview</text>
+  <text x="998" y="414" fill="#DCE8F8" font-family="Arial, sans-serif" font-size="24" font-weight="700">Scenario Simulation</text>
+  <rect x="106" y="454" width="202" height="44" rx="12" fill="#1A8B7A"/>
+  <text x="135" y="483" fill="#F8FBFF" font-family="Arial, sans-serif" font-size="22" font-weight="700">Portfolio Ready</text>
+  <rect x="326" y="454" width="228" height="44" rx="12" fill="#283D5D"/>
+  <text x="354" y="483" fill="#F8FBFF" font-family="Arial, sans-serif" font-size="22" font-weight="700">AI + Fintech + SaaS</text>
+  <defs>
+    <linearGradient id="bg" x1="120" y1="48" x2="1491" y2="536" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#101C31"/>
+      <stop offset="0.52" stop-color="#102038"/>
+      <stop offset="1" stop-color="#0B1527"/>
+    </linearGradient>
+    <radialGradient id="glowA" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1262 104) rotate(90) scale(296)">
+      <stop stop-color="#456DA8"/>
+      <stop offset="1" stop-color="#456DA8" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowB" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(210 510) rotate(90) scale(280)">
+      <stop stop-color="#17385D"/>
+      <stop offset="1" stop-color="#17385D" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowC" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1000 320) rotate(90) scale(210)">
+      <stop stop-color="#2E6D68"/>
+      <stop offset="1" stop-color="#2E6D68" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+</svg>
