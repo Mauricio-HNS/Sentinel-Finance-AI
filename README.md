@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./docs/branding/hero-banner.svg" alt="Sentinel Finance AI banner" />
+  <img src="./docs/branding/hero-banner.svg" alt="Sentinel Finance AI" />
 </p>
 
 # Sentinel Finance AI
@@ -11,114 +11,91 @@
   <img src="https://img.shields.io/badge/OpenAI-Responses%20API-0f3d2e?style=for-the-badge&logo=openai&logoColor=white" alt="OpenAI" />
 </p>
 
-Sentinel Finance AI is a financial risk intelligence platform built to predict churn, payment delays, revenue exposure and operational risk through predictive analytics and AI-generated explanations.
+Enterprise-oriented financial risk intelligence showcase combining a Next.js interface, ASP.NET Core orchestration API, isolated FastAPI prediction service and AI-assisted explanations.
 
-## Why this repository stands out
+> Portfolio project. Predictive outputs and integrations are demonstrative unless explicitly backed by measured production data.
 
-- enterprise SaaS positioning instead of a generic demo dashboard
-- .NET orchestration layer with isolated prediction service
-- AI-ready architecture with structured outputs and retrieval-backed flows
-- premium frontend presentation with dashboard, customers, alerts and AI Ops
-- clear path toward multi-tenant and production-grade data infrastructure
+## What it demonstrates
 
-## Product capabilities
+- executive risk dashboard and customer portfolio workflows
+- composite risk scoring and category breakdowns
+- AI-assisted executive briefings
+- prediction service isolation with FastAPI
+- structured AI outputs designed for deterministic UI rendering
+- retrieval-oriented grounding over business knowledge
+- operational alerts and simulation flows
+- clean separation between frontend, API, prediction and infrastructure concerns
 
-- executive dashboard with portfolio KPIs
-- customer portfolio and customer detail experience
-- composite risk scoring and category-level risk breakdown
-- AI copilot for executive briefings
-- AI Ops control center for prompts, evals and model posture
-- prediction service for churn and late-payment scoring
-- CSV ingestion entry point
-- alerts and simulator flows
-
-## Screenshots
+## Product surface
 
 ### Dashboard
-
 ![Sentinel Finance AI Dashboard](./docs/screenshots/dashboard.png)
 
-### Login
-
-![Sentinel Finance AI Login](./docs/screenshots/login.png)
-
 ### Customers
-
 ![Sentinel Finance AI Customers](./docs/screenshots/customers.png)
 
-### AI Ops
-
+### AI Operations
 ![Sentinel Finance AI AI Ops](./docs/screenshots/ai-ops.png)
 
 ## Architecture
 
 ```text
-frontend (Next.js)
-    ->
-backend API (ASP.NET Core 8, Clean Architecture)
-    -> prediction-service (FastAPI)
-    -> PostgreSQL
-    -> Redis
-    -> OpenAI API
+Next.js frontend
+      │
+      ▼
+ASP.NET Core 8 API
+      │
+      ├── PostgreSQL
+      ├── Redis
+      ├── OpenAI API
+      │
+      └── FastAPI prediction service
 ```
 
-## AI stack
+## AI layer
 
-- OpenAI `Responses API`
-- structured JSON outputs for deterministic UI rendering
-- retrieval-oriented grounding over contracts, tickets and playbooks
-- evaluation trail for future quality scoring
-- FastAPI prediction service for isolated risk logic
+- OpenAI Responses API
+- structured JSON outputs
+- retrieval-oriented grounding
+- evaluation-ready AI Ops surface
+- isolated prediction logic for future model evolution
 
 ## Repository structure
 
 ```text
-sentinel-finance-ai/
-  frontend/
-  backend/
-    src/
-    tests/
-  prediction-service/
-  docs/
-  datasets/
-  docker-compose.yml
+frontend/             Next.js application
+backend/              ASP.NET Core API and tests
+prediction-service/   FastAPI prediction service
+docs/                 architecture, branding and screenshots
+datasets/             demo data
+docker-compose.yml    local orchestration
 ```
 
-## Local run
+## Run locally
 
 ```bash
 cp .env.example .env
 docker compose up --build
 ```
 
-### Optional OpenAI configuration
+Optional configuration:
 
-```bash
+```env
 OPENAI_API_KEY=your_key_here
 OPENAI_MODEL=gpt-4.1-mini
 ```
 
-Without an API key, Sentinel falls back to deterministic local behavior so the demo still works.
-
-## Why recruiters like this repo
-
-- clean architecture with credible AI product framing
-- realistic finance and SaaS narrative
-- backend, frontend and AI orchestration in one project
-- polished visuals and clear expansion roadmap
+Without an API key, the demo uses deterministic local behavior where supported.
 
 ## Roadmap
 
-### Next
-
-- richer vector-store retrieval
-- real OpenAI eval runs
-- Redis-backed caching
-- stronger auth and async recalculation jobs
-
-### Later
-
+- stronger vector retrieval and grounded citations
+- measured AI evaluation runs
+- Redis-backed caching and asynchronous recalculation
+- stronger authentication and authorization
 - multi-tenant architecture
-- model registry integration
-- agentic investigation workflows
-- deeper enterprise integrations
+- model registry and agentic investigation workflows
+
+## Portfolio notes
+
+See [`docs/portfolio/PROJECT_POSITIONING.md`](docs/portfolio/PROJECT_POSITIONING.md) for the intended scope and positioning of this repository.
